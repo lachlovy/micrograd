@@ -1,6 +1,6 @@
 import numpy as np
 
-from microgard_engine import Value
+from .engine import Value
 
 
 class Neuron:
@@ -45,51 +45,3 @@ class MLP:
 
     def parameters(self):
         return [p for layer in self.hidden + [self.output] for p in layer.parameters()]
-
-
-if __name__ == "__main__":
-    # create a single neuron
-    x = [1, 2, 3]
-    n = Neuron(3)
-    print(f"Neuron output: {n(x)}")
-
-    # create a mlp layer
-    l = Layer(3, 3)
-    print(f"Layer output: {l(x)}")
-
-    # create a mlp
-    mlp = MLP(3, 1, 3, 3)
-    print(f"MLP output: {mlp(x)}")
-
-    # traning a mlp
-    xs = [[2.0, 3.0, -1.0], [3.0, -1.0, 0.5], [0.5, 1.0, 1.0], [1.0, 1.0, -1.0]]
-    ys = [1.0, -1.0, -1.0, 1.0]
-    lr = 0.05
-    num_epochs = 40
-
-    # before training
-    pred = [mlp(x) for x in xs]
-    print(f"Predictions before training: {pred}")
-
-    # training
-    for epoch in range(num_epochs):
-        pred = [mlp(x) for x in xs]
-        loss = sum([(p - y) ** 2 for p, y in zip(pred, ys)])
-
-        # zero the gradients
-        for p in mlp.parameters():
-            p.grad = 0.0
-
-        # do backward pass
-        loss.backward()
-
-        # update the parameters
-        for p in mlp.parameters():
-            p.data -= lr * p.grad
-
-        if epoch % 10 == 0:
-            print(f"Epoch {epoch}, Loss {loss.data}")
-
-    # after training
-    pred = [mlp(x) for x in xs]
-    print(f"Predictions after training: {pred}")

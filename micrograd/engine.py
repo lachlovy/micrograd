@@ -101,35 +101,3 @@ class Value:
         self.grad = 1.0
         for v in reversed(topo):
             v._backward()
-
-
-if __name__ == "__main__":
-    # Create a computation graph with simple addition and multiplication
-    # e = (a + b) * d
-    a = Value(1.0)
-    b = Value(3.0)
-    c = a + b
-    d = Value(-2.0)
-    e = c * d
-    e.backward()
-    print("For c = (a + b) * d:")
-    print(f"a: data={a.data}, grad={a.grad}")
-    print(f"b: data={b.data}, grad={b.grad}")
-    print(f"c: data={c.data}, grad={c.grad}")
-    print(f"d: data={d.data}, grad={d.grad}")
-    print(f"e: data={e.data}, grad={e.grad}")
-    print("-" * 50)
-
-    # Create a computation graph with exp and tanh and relu functions
-    # y = exp(x), z = tanh(x), w = relu(x)
-    x = Value(1.0)
-    y = x.exp()
-    y.backward()
-    z = x.tanh()
-    z.backward()
-    w = x.relu()
-    w.backward()
-    print(f"x: data={x.data}, grad={x.grad}")
-    print(f"y: data={y.data}, grad={y.grad}")
-    print(f"z: data={z.data}, grad={z.grad}")
-    print(f"w: data={w.data}, grad={w.grad}")
